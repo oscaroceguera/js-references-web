@@ -1,7 +1,18 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
+
+import { IPosts } from '../../type/Post';
+import { GET_POSTS } from '../../queries/post';
+
+import Posts from '../../components/Posts';
+import Loader from '../../components/Loader';
 import { Container, SearchBar, Input, Select, OptBox } from './styles';
 
+// TODO: Error
+// TODO: Zero posts
 const Home: React.FC = () => {
+  const { loading, data, error } = useQuery<IPosts>(GET_POSTS);
+  console.log('🚀 ~ file: index.tsx ~ line 18 ~ error', error);
   return (
     <Container>
       <SearchBar>
@@ -21,10 +32,13 @@ const Home: React.FC = () => {
             Category: <label>JAvascript</label>
           </div>
           <div>
-            Tag: <label>arrays</label>
+            Tags: <label>arrays</label>
           </div>
         </OptBox>
       </SearchBar>
+      {loading && <Loader secondary />}
+      {data ? <Posts posts={data.posts} /> : null}
+      {data ? <Posts posts={data.posts} /> : null}
     </Container>
   );
 };

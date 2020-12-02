@@ -55,5 +55,4 @@ export const OptBox = Styled.div`
       color: var(--blue-primary);
     }
   }
-
 `;
