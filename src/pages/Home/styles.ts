@@ -2,6 +2,7 @@ import Styled from 'styled-components';
 
 export const Container = Styled.div`
   padding: 1em;
+  position: relative;
 `;
 
 export const SearchBar = Styled.div`
@@ -54,5 +55,23 @@ export const OptBox = Styled.div`
     label {
       color: var(--blue-primary);
     }
+  }
+`;
+
+export const AddPost = Styled.button`
+  background: var(--purple-primary);
+  border-radius: 50%;
+  border: 0;
+  bottom: 0.5em;
+  box-shadow: 2px 2px 5px grey;
+  color: white;
+  cursor: pointer;
+  font-size: 40px;
+  height: 50px;
+  position: fixed;
+  right: 0.5em;
+  width: 50px;
+  &:hover {
+    opacity: 0.9;
   }
 `;

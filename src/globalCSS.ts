@@ -10,6 +10,7 @@ const GlobalStyles = createGlobalStyle`
     --blue-primary: #34ace0;
     --grey-primary: #84817a;
     --grey-secondary: #aaa69d;
+    --green-primary: #33d9b2;
   }
 `;
 
