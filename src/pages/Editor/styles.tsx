@@ -29,40 +29,6 @@ export const EditorContainer = Styled.form`
   padding: 1em;
 `;
 
-// export const CatalogsContainer = Styled.div`
-//   margin-top: 1em;
-//   display: flex;
-// `;
-
-// export const SelectContainer = Styled.div`
-//   flex-grow: 1;
-// `;
-
-// export const AddCatalogContainer = Styled.div`
-//   padding-left: 0.5em;
-//   cursor: pointer;
-
-//   &:hover {
-//     opacity: 0.8;
-//   }
-//   svg {
-//     width: 35px;
-//     height: 35px
-//   }
-// `;
-
-// interface IRequired {
-//   required: boolean;
-// }
-
-// export const RequiredSelect = Styled.div<IRequired>`
-//   margin-top: 0.5em;
-//   color: red;
-//   font-size: 0.6em;
-//   font-weight: 500;
-//   visibility: ${({ required }) => (required ? 'visible' : 'hidden')} };
-// `;
-
 interface IBtnSave {
   isVisible: boolean;
 }

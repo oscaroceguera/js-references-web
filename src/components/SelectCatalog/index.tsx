@@ -5,6 +5,7 @@ import { CombineCatalog, IOption, ISelectCatalog } from './types';
 
 import { useModal } from '../../hooks';
 import Modal from '../Modal';
+import CatalogsCRUD from '../../pages/CatalogsCRUD';
 
 import { capitalizeFirstWord } from '../../utils/capitalizeFirstWord';
 import { ReactComponent as AddIcon } from './add-file.svg';
@@ -33,8 +34,8 @@ const convertToSelectValues = (
 // TODO: Agregar tags
 // TODO: Update categoria
 // TODO: Update tags
-// TODO: Delete categoria
-// TODO: Delete tags
+// TODO: Delete categoria -  HAY QUE MANDARLO A OTRO ISSUE
+// TODO: Delete tags - HAY QUE MANDARLO A OTRO ISSUE
 
 const SelectCatalog: React.FC<ISelectCatalog> = ({
   data,
@@ -47,13 +48,9 @@ const SelectCatalog: React.FC<ISelectCatalog> = ({
   const className = isMulti ? 'basic-multi-select' : 'basic-single';
 
   const content = isMulti ? (
-    <React.Fragment>
-      <h1>CRUD DE TAGS</h1>
-    </React.Fragment>
+    <CatalogsCRUD type="tags" />
   ) : (
-    <div>
-      <h1>CRUD DE CATEGORIAS</h1>
-    </div>
+    <CatalogsCRUD type="categories" />
   );
 
   return (
@@ -76,7 +73,7 @@ const SelectCatalog: React.FC<ISelectCatalog> = ({
         </AddCatalogContainer>
       </CatalogsContainer>
       <Modal
-        headerText="TITULO!"
+        headerText={isMulti ? 'CRUD: TAGS' : 'CRUD: CATEGORIES'}
         isShown={isShown}
         hide={toggle}
         modalContent={content}

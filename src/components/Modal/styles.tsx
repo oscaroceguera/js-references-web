@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 700;
-  width: inherit;
+  width: 50%;
   outline: 0;
 `;
 export const Backdrop = styled.div`
@@ -19,6 +19,7 @@ export const Backdrop = styled.div`
   z-index: 500;
 `;
 export const StyledModal = styled.div`
+  padding: 1em;
   z-index: 100;
   background: white;
   position: relative;
@@ -37,7 +38,7 @@ export const HeaderText = styled.div`
   color: lightgray;
 `;
 export const CloseButton = styled.button`
-  font-size: 0.8rem;
+  font-size: 1rem;
   border: none;
   border-radius: 3px;
   margin-left: 0.5rem;

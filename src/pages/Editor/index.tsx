@@ -35,8 +35,6 @@ const Editor: React.FC = () => {
   });
   const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
 
-  console.log({ state });
-
   const goBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     history.push('/');
