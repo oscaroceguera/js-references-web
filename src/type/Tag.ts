@@ -4,7 +4,7 @@ export interface ITag {
 }
 
 export interface ITags {
-  getTags: ITag[];
+  tags: ITag[];
 }
 
 export type ITagMutation = {

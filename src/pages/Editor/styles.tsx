@@ -29,18 +29,6 @@ export const EditorContainer = Styled.form`
   padding: 1em;
 `;
 
-interface IRequired {
-  required: boolean;
-}
-
-export const RequiredSelect = Styled.div<IRequired>`
-  margin-top: 0.5em;
-  color: red;
-  font-size: 0.6em;
-  font-weight: 500;
-  visibility: ${({ required }) => (required ? 'visible' : 'hidden')} };
-`;
-
 interface IBtnSave {
   isVisible: boolean;
 }

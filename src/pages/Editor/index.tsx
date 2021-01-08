@@ -1,155 +1,145 @@
-import React, {
-  MouseEvent,
-  FormEvent,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { MouseEvent, FormEvent, useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import Select from 'react-select';
+import { useQuery } from '@apollo/client';
 
-import Field from '../../components/Form/Field';
-import {
-  Container,
-  GoBack,
-  EditorContainer,
-  Title,
-  RequiredSelect,
-  BtnSave,
-} from './styles';
+import { Field, Loader, ErrorMsg, SelectCatalog } from '../../components';
+import { IOption } from '../../components/SelectCatalog/types';
 
-interface IInitialState {
-  title: string;
-  category: string;
-  tags?: string[];
-  content: string;
-}
+import { ICategories, ITags } from '../../type';
+import { GET_CATEGORIES, GET_TAGS } from '../../queries';
 
-const CATEGORY_OPT = [
-  { label: 'Apple', value: '123', name: 'category' },
-  { label: 'Mango', value: '321', name: 'category' },
-];
-const TAGS_OPT = [
-  { label: 'Javascript', value: '939392', name: 'tags' },
-  { label: 'Vue', value: '09234', name: 'tags' },
-  { label: 'React', value: '888', name: 'tags' },
-];
+import { setFields } from './actions';
+import { INITIAL_STATE } from './types';
+import reducer from './reducer';
 
-interface IOption {
-  label: string;
-  name: string;
-  value: string;
-}
+import { Container, GoBack, EditorContainer, Title, BtnSave } from './styles';
 
-const INITIAL_STATE = {
-  title: '',
-  category: '',
-  tags: [],
-  content: '',
-};
+type CallbackType = (...args: any) => void;
 
-// TODO: usar useReducer para que no se haga mucho render
 const Editor: React.FC = () => {
-  console.log('---EDITOR RENDER---');
   const history = useHistory();
-  const [fields, setFields] = useState<IInitialState>(INITIAL_STATE);
+  const {
+    loading: loadingCategory,
+    data: dataCategory,
+    error: errorCategory,
+  } = useQuery<ICategories>(GET_CATEGORIES, {
+    pollInterval: 2000,
+  });
+
+  const {
+    loading: loadingTag,
+    data: dataTag,
+    error: errorTag,
+  } = useQuery<ITags>(GET_TAGS, {
+    pollInterval: 2000,
+  });
+  const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
 
   const goBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     history.push('/');
   };
 
-  const handleField = useCallback(
+  const handleField = useCallback<CallbackType>(
     (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       event.preventDefault();
-      setFields({
-        ...fields,
-        [event.currentTarget.id]: event.currentTarget.value,
-      });
+
+      const payload = {
+        field: event.currentTarget.id,
+        value: event.currentTarget.value,
+      };
+
+      dispatch(setFields(payload));
     },
-    [fields],
+    [],
   );
 
-  const onChangeSelect = useCallback(
-    (e: any) => {
-      setFields({
-        ...fields,
-        [e.name]: e.value,
-      });
-    },
-    [fields],
-  );
+  const onChangeSelect = useCallback<CallbackType>((e: any) => {
+    const payload = {
+      field: e.name,
+      value: e.value,
+    };
 
-  const onChangeTags = useCallback(
-    (e: any) => {
-      setFields({
-        ...fields,
-        tags: e ? e.map((item: IOption) => item.value) : [],
-      });
-    },
-    [fields],
-  );
+    dispatch(setFields(payload));
+  }, []);
+
+  const onChangeTags = useCallback<CallbackType>((e: any) => {
+    const payload = {
+      field: 'tags',
+      value: e ? e.map((item: IOption) => item.value) : [],
+    };
+
+    dispatch(setFields(payload));
+  }, []);
 
   const handleSubmit = () => {
     console.log('handleSubmit');
   };
 
-  const isVisible = useMemo(() => {
-    const { title, tags, category, content } = fields;
+  const isVisible = useMemo<boolean>(() => {
+    const { title, tags, category, content } = state;
     const isTagsEmpty = typeof tags !== 'undefined' && tags.length > 0;
     return !!title && !!category && !!content && isTagsEmpty;
-  }, [fields]);
+  }, [state]);
+
+  const isLoading = useMemo<boolean>(() => {
+    return loadingCategory || loadingTag;
+  }, [loadingTag, loadingCategory]);
+
+  const isError = useMemo<unknown>(() => {
+    return errorCategory || errorTag;
+  }, [errorCategory, errorTag]);
 
   return (
     <Container onSubmit={handleSubmit}>
       <GoBack onClick={goBack}>Back</GoBack>
-      <Title>Editor</Title>
-      <EditorContainer>
-        <Field
-          id="title"
-          label="Title"
-          value={fields.title}
-          required
-          onChange={handleField}
-        />
-        <Select
-          className="basic-single"
-          classNamePrefix="select"
-          name="category"
-          options={CATEGORY_OPT}
-          onChange={onChangeSelect}
-        />
-        <RequiredSelect required={!fields.category}>* Required</RequiredSelect>
-        <br />
-        <Select
-          className="basic-multi-select"
-          classNamePrefix="select"
-          isMulti
-          name="tags"
-          options={TAGS_OPT}
-          onChange={onChangeTags}
-        />
-        <RequiredSelect required={fields.tags?.length === 0}>
-          * Required
-        </RequiredSelect>
-        <br />
-        <Field
-          id="content"
-          label="Content"
-          kind="textarea"
-          placeholder="MD content..."
-          value={fields.content}
-          required
-          onChange={handleField}
-        />
-        <br />
-        <BtnSave
-          type="submit"
-          value="Save"
-          disabled={!isVisible}
-          isVisible={isVisible}
-        />
-      </EditorContainer>
+      {isLoading && !isError && <Loader secondary />}
+      {isError && !isLoading && <ErrorMsg />}
+      {!isLoading && !isError && (
+        <>
+          <Title>Editor</Title>
+          <EditorContainer>
+            <Field
+              id="title"
+              label="Title"
+              value={state.title}
+              required
+              onChange={handleField}
+            />
+            <SelectCatalog
+              data={dataCategory ? dataCategory.categories : undefined}
+              field="category"
+              required={!state.category}
+              onChange={onChangeSelect}
+            />
+            <br />
+            <SelectCatalog
+              data={dataTag ? dataTag.tags : undefined}
+              field="tags"
+              isMulti
+              required={state.tags?.length === 0}
+              onChange={onChangeTags}
+            />
+            <br />
+            <Field
+              id="content"
+              label="Content"
+              kind="textarea"
+              placeholder="MD content..."
+              value={state.content}
+              required
+              onChange={handleField}
+            />
+            <br />
+            <BtnSave
+              type="submit"
+              value="Save"
+              disabled={!isVisible}
+              isVisible={isVisible}
+            />
+          </EditorContainer>
+        </>
+      )}
     </Container>
   );
 };

@@ -10,6 +10,7 @@ interface IProps
   requiredMsg?: string;
   value: string;
   kind?: string;
+  width?: string;
 }
 
 interface IInput
@@ -33,6 +34,7 @@ const Field: React.FC<IProps> = ({
   requiredMsg,
   value,
   kind = 'input',
+  width = '97%',
   ...rest
 }: IProps) => {
   required = required && (value.length < 1 || value.length > 120);
@@ -44,7 +46,7 @@ const Field: React.FC<IProps> = ({
   const success = !required && value.length > 0;
 
   return (
-    <Container required={required} success={success}>
+    <Container required={required} success={success} width={width}>
       <label>
         {label}
         <br />
@@ -53,6 +55,7 @@ const Field: React.FC<IProps> = ({
         ) : (
           <Input id={id} value={value} {...rest} />
         )}
+        <br />
         <ShowError required={required}>{requiredMsg}</ShowError>
       </label>
     </Container>

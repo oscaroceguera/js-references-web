@@ -3,6 +3,7 @@ import Styled from 'styled-components';
 interface IContainer {
   required: boolean;
   success: boolean;
+  width: string;
 }
 
 export const Container = Styled.div<IContainer>`
@@ -16,7 +17,7 @@ export const Container = Styled.div<IContainer>`
       border: 0;
       margin-top: 0.5em;
       padding: 0.7em;
-      width: 97%;
+      width: ${(props) => props.width};
       border-bottom: ${({ required, success }) => {
         switch (true) {
           case required:

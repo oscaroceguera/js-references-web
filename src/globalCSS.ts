@@ -4,6 +4,7 @@ const GlobalStyles = createGlobalStyle`
   html {
     --purple-primary: #40407a;
     --purple-secondary: #2c2c54;
+    --purple-C64: #706fd3;
     --white-secondary: #f7f1e3;
     --red-flourescent: #ff5252;
     --yellow: #ffe100e8;
