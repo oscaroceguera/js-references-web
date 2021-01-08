@@ -7,6 +7,7 @@ import Header from './components/Header';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Editor = React.lazy(() => import('./pages/Editor'));
+const Post = React.lazy(() => import('./pages/Post'));
 
 import Loader from './components/Loader';
 
@@ -23,6 +24,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/editor">
               <Editor />
+            </Route>
+            <Route exact path="/detail/:id">
+              <Post />
             </Route>
           </Switch>
         </Router>

@@ -15,12 +15,11 @@ const Home: React.FC = () => {
   const { loading, data, error } = useQuery<IPosts>(GET_POSTS, {
     pollInterval: 1000,
   });
-  console.log('🚀 ~ file: index.tsx ~ line 16 ~ error', error);
   const history = useHistory();
 
   const addPost = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    history.push('/Editor');
+    history.push('/editor');
   };
 
   return (

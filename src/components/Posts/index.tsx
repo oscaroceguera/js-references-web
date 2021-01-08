@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Post, Container, Title, Category, Tags } from './styles';
 
 import { IPost } from '../../type/Post';
@@ -9,10 +10,17 @@ interface Props {
 }
 
 const Posts: React.FC<Props> = ({ posts }: Props) => {
+  const history = useHistory();
+
+  const handleDetail = (id?: string) => (event: MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    history.push(`/detail/${id}`);
+  };
+
   return (
     <Container>
       {posts.map((item: IPost) => (
-        <Post key={item._id}>
+        <Post key={item._id} onClick={handleDetail(item._id)}>
           <Title>{item.title}</Title>
           <Category>{item.category.name}</Category>
           <Tags>
