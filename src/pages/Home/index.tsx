@@ -13,7 +13,7 @@ import { Container, SearchBar, Input, Select, OptBox, AddPost } from './styles';
 // TODO: Zero posts
 const Home: React.FC = () => {
   const { loading, data, error } = useQuery<IPosts>(GET_POSTS, {
-    pollInterval: 200,
+    pollInterval: 1000,
   });
   console.log('🚀 ~ file: index.tsx ~ line 16 ~ error', error);
   const history = useHistory();
@@ -48,7 +48,6 @@ const Home: React.FC = () => {
         </OptBox>
       </SearchBar>
       {loading && <Loader secondary />}
-      {data ? <Posts posts={data.posts} /> : null}
       {data ? <Posts posts={data.posts} /> : null}
     </Container>
   );
