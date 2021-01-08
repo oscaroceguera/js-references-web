@@ -1,12 +1,18 @@
-import React, { MouseEvent, FormEvent, useCallback, useMemo } from 'react';
+import React, {
+  MouseEvent,
+  FormEvent,
+  useCallback,
+  useMemo,
+  SyntheticEvent,
+} from 'react';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 
 import { Field, Loader, ErrorMsg, SelectCatalog } from '../../components';
 import { IOption } from '../../components/SelectCatalog/types';
 
 import { ICategories, ITags } from '../../type';
-import { GET_CATEGORIES, GET_TAGS } from '../../queries';
+import { GET_CATEGORIES, GET_TAGS, ADD_POST } from '../../queries';
 
 import { setFields } from './actions';
 import { INITIAL_STATE } from './types';
@@ -33,7 +39,10 @@ const Editor: React.FC = () => {
   } = useQuery<ITags>(GET_TAGS, {
     pollInterval: 2000,
   });
+
   const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
+
+  const [createPost] = useMutation(ADD_POST);
 
   const goBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -72,8 +81,11 @@ const Editor: React.FC = () => {
     dispatch(setFields(payload));
   }, []);
 
-  const handleSubmit = () => {
-    console.log('handleSubmit');
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const { title, category, content, tags } = state;
+    createPost({ variables: { title, category, content, tags } });
+    history.push('/');
   };
 
   const isVisible = useMemo<boolean>(() => {
