@@ -4,12 +4,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import { Field, Loader, ErrorMsg } from '../../../components';
 import ListElementMemo from '../Components/ListElement';
 
-import { ICategories, ICategory } from '../../../type';
-import {
-  GET_CATEGORIES,
-  ADD_CATEGORY,
-  UPDATE_CATEGORY,
-} from '../../../queries';
+import { ITags, ITag } from '../../../type';
+import { GET_TAGS, ADD_TAG, UPDATE_TAG } from '../../../queries';
 
 import { Container, AddSection, FieldContainer, AddBtn, List } from '../styles';
 
@@ -17,14 +13,14 @@ type CallbackType = (...args: any) => void;
 
 // TODO: Loading save
 // TODO: Error save
-const Categories: React.FC = () => {
-  const { loading, data, error } = useQuery<ICategories>(GET_CATEGORIES, {
+const Tags: React.FC = () => {
+  const { loading, data, error } = useQuery<ITags>(GET_TAGS, {
     pollInterval: 1000,
   });
 
   const [field, setField] = React.useState('');
 
-  const [createCategory] = useMutation(ADD_CATEGORY);
+  const [createTag] = useMutation(ADD_TAG);
 
   const handleField = React.useCallback<CallbackType>(
     (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -35,7 +31,7 @@ const Categories: React.FC = () => {
   );
 
   const onSave = () => {
-    createCategory({ variables: { name: field } });
+    createTag({ variables: { name: field } });
     setField('');
   };
 
@@ -52,8 +48,8 @@ const Categories: React.FC = () => {
           <AddSection>
             <FieldContainer>
               <Field
-                id="category"
-                label="Category"
+                id="tag"
+                label="Tag"
                 width="90%"
                 value={field}
                 required
@@ -69,11 +65,11 @@ const Categories: React.FC = () => {
             </AddBtn>
           </AddSection>
           <List>
-            {data?.categories.map((category: ICategory) => (
+            {data?.tags.map((tag: ITag) => (
               <ListElementMemo
-                key={category._id}
-                itemData={category}
-                updateMutation={UPDATE_CATEGORY}
+                key={tag._id}
+                itemData={tag}
+                updateMutation={UPDATE_TAG}
               />
             ))}
           </List>
@@ -83,4 +79,4 @@ const Categories: React.FC = () => {
   );
 };
 
-export default Categories;
+export default Tags;

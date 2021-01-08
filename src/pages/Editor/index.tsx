@@ -23,7 +23,7 @@ const Editor: React.FC = () => {
     data: dataCategory,
     error: errorCategory,
   } = useQuery<ICategories>(GET_CATEGORIES, {
-    pollInterval: 200,
+    pollInterval: 2000,
   });
 
   const {
@@ -31,7 +31,7 @@ const Editor: React.FC = () => {
     data: dataTag,
     error: errorTag,
   } = useQuery<ITags>(GET_TAGS, {
-    pollInterval: 200,
+    pollInterval: 2000,
   });
   const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
 

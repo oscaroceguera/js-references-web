@@ -30,13 +30,6 @@ const convertToSelectValues = (
   return result;
 };
 
-// TODO: Agregar categoria
-// TODO: Agregar tags
-// TODO: Update categoria
-// TODO: Update tags
-// TODO: Delete categoria -  HAY QUE MANDARLO A OTRO ISSUE
-// TODO: Delete tags - HAY QUE MANDARLO A OTRO ISSUE
-
 const SelectCatalog: React.FC<ISelectCatalog> = ({
   data,
   field,
