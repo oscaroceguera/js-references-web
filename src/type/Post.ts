@@ -7,6 +7,11 @@ export interface IPost {
   content: string;
   category: ICategory;
   tags: ITag[];
+  createdAt: number;
+}
+
+export interface IPostRes {
+  post: IPost;
 }
 
 export interface IPosts {
