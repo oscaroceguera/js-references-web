@@ -4,26 +4,39 @@ import React, {
   useCallback,
   useMemo,
   SyntheticEvent,
+  useEffect,
 } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client';
+import { useHistory, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 
 import { Field, Loader, ErrorMsg, SelectCatalog } from '../../components';
 import { IOption } from '../../components/SelectCatalog/types';
 
-import { ICategories, ITags } from '../../type';
-import { GET_CATEGORIES, GET_TAGS, ADD_POST } from '../../queries';
+import { ICategories, ITags, IPostRes } from '../../type';
+import {
+  GET_CATEGORIES,
+  GET_TAGS,
+  ADD_POST,
+  GET_POST,
+  UPDATE_POST,
+} from '../../queries';
 
-import { setFields } from './actions';
-import { INITIAL_STATE } from './types';
+import { setFields, updateFields } from './actions';
+import { INITIAL_STATE, IUpdateFieldsPayload } from './types';
 import reducer from './reducer';
 
 import { Container, GoBack, EditorContainer, Title, BtnSave } from './styles';
 
 type CallbackType = (...args: any) => void;
 
+interface RouteParams {
+  id: string;
+}
+
 const Editor: React.FC = () => {
   const history = useHistory();
+  const { id } = useParams<RouteParams>();
+
   const {
     loading: loadingCategory,
     data: dataCategory,
@@ -43,6 +56,31 @@ const Editor: React.FC = () => {
   const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
 
   const [createPost] = useMutation(ADD_POST);
+  const [updatePost] = useMutation(UPDATE_POST);
+
+  const [
+    getPost,
+    { error: errorGetPost, loading: loadingGetPost, data: dataPost },
+  ] = useLazyQuery<IPostRes>(GET_POST);
+
+  useEffect(() => {
+    if (id) {
+      getPost({ variables: { id } });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (dataPost && dataPost.post._id && dataPost.post.category._id) {
+      const newData: IUpdateFieldsPayload = {
+        _id: dataPost.post._id,
+        title: dataPost.post.title,
+        category: dataPost.post.category._id,
+        tags: dataPost.post.tags.map((tag) => tag._id),
+        content: dataPost.post.content,
+      };
+      dispatch(updateFields(newData));
+    }
+  }, [dataPost]);
 
   const goBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -84,7 +122,11 @@ const Editor: React.FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const { title, category, content, tags } = state;
-    createPost({ variables: { title, category, content, tags } });
+    if (id) {
+      updatePost({ variables: { id, title, category, content, tags } });
+    } else {
+      createPost({ variables: { title, category, content, tags } });
+    }
     history.push('/');
   };
 
@@ -95,12 +137,12 @@ const Editor: React.FC = () => {
   }, [state]);
 
   const isLoading = useMemo<boolean>(() => {
-    return loadingCategory || loadingTag;
-  }, [loadingTag, loadingCategory]);
+    return loadingCategory || loadingTag || loadingGetPost;
+  }, [loadingTag, loadingCategory, loadingGetPost]);
 
   const isError = useMemo<unknown>(() => {
-    return errorCategory || errorTag;
-  }, [errorCategory, errorTag]);
+    return errorCategory || errorTag || errorGetPost;
+  }, [errorCategory, errorTag, errorGetPost]);
 
   return (
     <Container onSubmit={handleSubmit}>
@@ -123,6 +165,7 @@ const Editor: React.FC = () => {
               field="category"
               required={!state.category}
               onChange={onChangeSelect}
+              value={state.category}
             />
             <br />
             <SelectCatalog
@@ -131,6 +174,7 @@ const Editor: React.FC = () => {
               isMulti
               required={state.tags?.length === 0}
               onChange={onChangeTags}
+              value={state.tags}
             />
             <br />
             <Field
@@ -145,7 +189,7 @@ const Editor: React.FC = () => {
             <br />
             <BtnSave
               type="submit"
-              value="Save"
+              value={id ? 'Update' : 'Save'}
               disabled={!isVisible}
               isVisible={isVisible}
             />

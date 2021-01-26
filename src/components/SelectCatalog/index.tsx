@@ -36,6 +36,7 @@ const SelectCatalog: React.FC<ISelectCatalog> = ({
   onChange,
   required = false,
   isMulti = false,
+  value,
 }: ISelectCatalog) => {
   const { isShown, toggle } = useModal();
   const className = isMulti ? 'basic-multi-select' : 'basic-single';
@@ -45,6 +46,15 @@ const SelectCatalog: React.FC<ISelectCatalog> = ({
   ) : (
     <CatalogsCRUD type="categories" />
   );
+
+  const opts = data ? convertToSelectValues(data, field) : [];
+
+  let newValue;
+  if (Array.isArray(value)) {
+    newValue = opts.filter((item) => value.includes(item.value || ''));
+  } else {
+    newValue = opts.find((item) => item.value === value);
+  }
 
   return (
     <>
@@ -56,8 +66,9 @@ const SelectCatalog: React.FC<ISelectCatalog> = ({
             classNamePrefix="select"
             isMulti={isMulti}
             name={field}
-            options={data ? convertToSelectValues(data, field) : []}
+            options={opts}
             onChange={onChange}
+            value={newValue}
           />
           <RequiredSelect required={required}>* Required</RequiredSelect>
         </SelectContainer>
