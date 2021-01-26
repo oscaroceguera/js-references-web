@@ -1,9 +1,9 @@
 import React, { useMemo, useEffect, MouseEvent } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 
-import { GET_POST } from '../../queries';
+import { GET_POST, DELETE_POST } from '../../queries';
 import { ITag, IPostRes } from '../../type';
 import { getDate } from '../../utils/convertUnixTimestamp';
 
@@ -32,6 +32,8 @@ const Post: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const [getPost, { error, loading, data }] = useLazyQuery<IPostRes>(GET_POST);
 
+  const [removePost] = useMutation(DELETE_POST);
+
   useEffect(() => {
     getPost({ variables: { id } });
   }, []);
@@ -39,6 +41,17 @@ const Post: React.FC = () => {
   const goBack = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     history.push('/');
+  };
+
+  const handleDelete = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    removePost({ variables: { id } });
+    history.push('/');
+  };
+
+  const handleEdit = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    history.push(`/editor/${id}`);
   };
 
   const isLoading = useMemo<unknown>(() => {
@@ -69,8 +82,8 @@ const Post: React.FC = () => {
             ))}
           </Tags>
           <BtnsContainer>
-            <BtnEdit>Edit</BtnEdit>
-            <BtnDelete>Delete</BtnDelete>
+            <BtnEdit onClick={handleEdit}>Edit</BtnEdit>
+            <BtnDelete onClick={handleDelete}>Delete</BtnDelete>
           </BtnsContainer>
           <ContentContainer>
             {data?.post && <ReactMarkdown source={data.post.content} />}

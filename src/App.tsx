@@ -28,6 +28,9 @@ const App: React.FC = () => {
             <Route exact path="/detail/:id">
               <Post />
             </Route>
+            <Route exact path="/editor/:id">
+              <Editor />
+            </Route>
           </Switch>
         </Router>
       </Suspense>

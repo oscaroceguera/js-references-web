@@ -13,6 +13,7 @@ export interface ISelectCatalog {
   data?: CombineCatalog[];
   field: string;
   required?: boolean;
+  value?: string | string[];
   onChange: (e: any) => void;
   isMulti?: boolean;
 }

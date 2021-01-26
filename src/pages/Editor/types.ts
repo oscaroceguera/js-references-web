@@ -10,6 +10,14 @@ export interface ISetFieldsPayload {
   value: string | [];
 }
 
+export interface IUpdateFieldsPayload {
+  _id: string;
+  title: string;
+  category: string;
+  tags: string[];
+  content: string;
+}
+
 export const INITIAL_STATE: IInitialState = {
   title: '',
   category: '',
