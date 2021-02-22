@@ -17,3 +17,7 @@ export interface IPostRes {
 export interface IPosts {
   posts: IPost[];
 }
+
+export interface ISearchedPosts {
+  searchPost: IPost[];
+}

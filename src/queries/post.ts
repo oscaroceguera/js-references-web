@@ -16,6 +16,22 @@ export const GET_POSTS = gql`
   }
 `;
 
+export const SEARCH_POST = gql`
+  query searchedPosts($search: String, $category: String, $tags: [String]) {
+    searchPost(search: $search, category: $category, tags: $tags) {
+      _id
+      title
+      category {
+        name
+      }
+      tags {
+        _id
+        name
+      }
+    }
+  }
+`;
+
 export const GET_POST = gql`
   query getPost($id: ID!) {
     post(_id: $id) {
