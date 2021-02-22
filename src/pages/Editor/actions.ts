@@ -1,4 +1,3 @@
-import { TypeOfTag } from 'typescript';
 import { ISetFieldsPayload, IUpdateFieldsPayload } from './types';
 
 export const SET_FIELDS = 'SET_FIELDS';
