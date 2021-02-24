@@ -2,6 +2,9 @@ import Styled, { css } from 'styled-components';
 
 export const Container = Styled.div`
   padding: 1em;
+  @media (max-width: 768px) {
+    padding: 0.5em;
+  }
 `;
 
 export const GoBack = Styled.button`
@@ -22,6 +25,11 @@ export const PostContainer = Styled.form`
   width: 50%;
   margin: 0 auto;
   padding: 1em;
+  @media (max-width: 768px) {
+    width: 95%;
+    padding: 0.5em;
+    margin: 0;
+  }
 `;
 
 export const Title = Styled.h1`

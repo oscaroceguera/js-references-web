@@ -8,6 +8,9 @@ export const Wrapper = styled.div`
   z-index: 700;
   width: 50%;
   outline: 0;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 export const Backdrop = styled.div`
   position: fixed;

@@ -1,7 +1,7 @@
 import Styled from 'styled-components';
 
 export const Container = Styled.div`
-  padding: 1em;
+  padding: 0;
   position: relative;
 `;
 
@@ -9,6 +9,9 @@ export const SearchBar = Styled.div`
   padding: 2em;
   text-align: center;
   margin: 0 auto;
+  @media (max-width: 768px) {
+    padding: 1em;
+  }
 `;
 
 export const Input = Styled.input`
@@ -17,6 +20,10 @@ export const Input = Styled.input`
   border-radius: 4px;
   border: 1px solid var(--blue-primary);
   margin: 0 0.5em;
+  @media (max-width: 768px) {
+    width: 90%;
+    margin: 0;
+  }
 `;
 
 interface ISelect {
@@ -33,6 +40,9 @@ export const Select = Styled.select<ISelect>`
   border-radius: 4px;
   margin-right: 0.5em;
   width: 10%;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const OptBox = Styled.div`
@@ -60,7 +70,10 @@ export const OptBox = Styled.div`
 
 export const AddPost = Styled.button`
   background: var(--purple-primary);
-  border-radius: 50%;
+  display: inline-block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;  
   border: 0;
   bottom: 0.5em;
   box-shadow: 2px 2px 5px grey;
