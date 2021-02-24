@@ -2,6 +2,9 @@ import Styled from 'styled-components';
 
 export const Container = Styled.div`
   padding: 1em;
+  @media (max-width: 768px) {
+    padding: 0.7em;
+  }
 `;
 
 export const GoBack = Styled.button`
@@ -27,6 +30,10 @@ export const EditorContainer = Styled.form`
   width: 50%;
   margin: 0 auto;
   padding: 1em;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0;
+  }
 `;
 
 interface IBtnSave {

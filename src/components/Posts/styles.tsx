@@ -4,9 +4,16 @@ export const Container = Styled.div`
   display: grid;
   gap: 1em;
   grid-auto-rows: 1fr;
+  // grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   grid-template-columns: 1fr 1fr;
   margin: 0 auto;
   width: 90%;
+
+  @media (max-width: 768px) {
+    margin: 0;
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Post = Styled.div`
@@ -21,6 +28,9 @@ export const Post = Styled.div`
   &:hover {
     border: 2px solid var(--grey-secondary);
   }
+  // @media (max-width: 768px) {
+  //   margin: 0.5em;
+  // }
 `;
 
 export const Title = Styled.h2`

@@ -12,7 +12,7 @@ import {
 
 import Posts from '../../components/Posts';
 import Loader from '../../components/Loader';
-import { Container, SearchBar, Input, Select, OptBox, AddPost } from './styles';
+import { Container, SearchBar, Input, Select, AddPost } from './styles';
 
 interface ISearchPosts {
   search: string;
